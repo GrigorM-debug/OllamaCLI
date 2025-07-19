@@ -1,0 +1,27 @@
+services:
+  ollama:
+    volumes:
+        - ollama:/root/.ollama
+    ports:
+        - 11434:11434
+    container_name: ollama-model
+    image: ollama/ollama
+    networks:
+        - ollama-network
+  ollamacli:
+    depends_on:
+      - ollama
+    image: ${DOCKER_REGISTRY-}ollamacli
+    build:
+      context: .
+      dockerfile: OllamaCLI/Dockerfile
+    networks:
+      - ollama-network
+
+volumes:
+    ollama:
+        name: ollama
+
+networks:
+    ollama-network:
+      name: ollama-network
