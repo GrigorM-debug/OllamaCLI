@@ -1,5 +1,7 @@
 services:
   ollama:
+    stdin_open: true 
+    tty: true  
     volumes:
         - ollama:/root/.ollama
     ports:
@@ -8,9 +10,12 @@ services:
     image: ollama/ollama
     networks:
         - ollama-network
+
   ollamacli:
     depends_on:
       - ollama
+    stdin_open: true # <--- THIS IS THE MISSING/INCORRECT LINE
+    tty: true        # <--- THIS ONE IS CORRECTLY SET AS PER YOUR GREP
     image: ${DOCKER_REGISTRY-}ollamacli
     build:
       context: .
